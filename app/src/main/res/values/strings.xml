@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SampleNetwork</string>
+    <string name="img_content_descpt_country_flag_image">country_flag_image</string>
+</resources>
