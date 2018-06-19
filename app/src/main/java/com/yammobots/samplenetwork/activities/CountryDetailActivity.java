@@ -6,6 +6,8 @@ import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,20 +19,33 @@ import com.yammobots.samplenetwork.data.vo.CountryVO;
 import com.yammobots.samplenetwork.data.vo.CurrencyVO;
 import com.yammobots.samplenetwork.utils.SvgSoftwareLayerSetter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class CountryDetailActivity extends AppCompatActivity {
 
-    private ImageView imgVFlag;
-    private TextView tvCountryName ;
-    private TextView tvCapitalCity;
-    private TextView tvPopulation;
-    private TextView tvCurrencySymbol;
-    private TextView tvCurrencyCode;
-    private TextView tvCurrencyName;
-    private RequestBuilder<PictureDrawable> requestBuilder;
+    @BindView(R.id.img_v_dt_country_flag)
+    ImageView imgVFlag;
+    @BindView(R.id.tv_dt_country_name)
+    TextView tvCountryName;
+    @BindView(R.id.tv_dt_capital_city)
+    TextView tvCapitalCity;
+    @BindView(R.id.tv_dt_population)
+    TextView tvPopulation;
+    @BindView(R.id.tv_dt_currency_symbol)
+    TextView tvCurrencySymbol;
+    @BindView(R.id.tv_dt_currency_code)
+    TextView tvCurrencyCode;
+    @BindView(R.id.tv_dt_currency_name)
+    TextView tvCurrencyName;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    RequestBuilder<PictureDrawable> requestBuilder;
 
-    public static Intent getNewIntent(Context context, String countryName){
+
+    public static Intent getNewIntent(Context context, String countryName) {
         Intent intent = new Intent(context, CountryDetailActivity.class);
         intent.putExtra("country_name", countryName);
         return intent;
@@ -41,13 +56,16 @@ public class CountryDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_country_detail);
 
-        imgVFlag = findViewById(R.id.img_v_dt_country_flag);
-        tvCountryName = findViewById(R.id.tv_dt_country_name);
-        tvCapitalCity = findViewById(R.id.tv_dt_capital_city);
-        tvPopulation = findViewById(R.id.tv_dt_population);
-        tvCurrencySymbol = findViewById(R.id.tv_dt_currency_symbol);
-        tvCurrencyCode = findViewById(R.id.tv_dt_currency_code);
-        tvCurrencyName = findViewById(R.id.tv_dt_currency_name);
+        ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         requestBuilder = Glide.with(this)
                 .as(PictureDrawable.class)
@@ -56,11 +74,11 @@ public class CountryDetailActivity extends AppCompatActivity {
 
         String countryName = getIntent().getStringExtra("country_name");
         CountryVO countryVO = CountryModel.getInstance().getCountryByName(countryName);
-        bindView(countryVO);
+        bindData(countryVO);
 
     }
 
-    private void bindView(CountryVO country) {
+    private void bindData(CountryVO country) {
         Uri uri = Uri.parse(country.getFlag());
         requestBuilder.load(uri).into(imgVFlag);
 
@@ -68,7 +86,7 @@ public class CountryDetailActivity extends AppCompatActivity {
         tvCapitalCity.setText(country.getCapital());
         tvPopulation.setText(country.getPopulation());
 
-        for (CurrencyVO currencyVO : country.getCurrencies()){
+        for (CurrencyVO currencyVO : country.getCurrencies()) {
             tvCurrencySymbol.setText(currencyVO.getSymbol());
             tvCurrencyCode.setText(currencyVO.getCode());
             tvCurrencyName.setText(currencyVO.getName());

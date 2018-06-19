@@ -28,12 +28,14 @@ ext {
     EVENT_BUS_VERSION = '3.1.1'
     GSON_VERSION = '2.8.5'
     ANDROID_SVG_IMG_VERSION ='1.2.1'
+    BUTTER_KNIFE_VERSION = '8.8.1'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     //noinspection GradleCompatible
     implementation "com.android.support:appcompat-v7:$SUPPORT_LIBARARY_VERSION"
+    implementation "com.android.support:design:$SUPPORT_LIBARARY_VERSION"
     implementation "com.android.support.constraint:constraint-layout:$CONSTRAINT_LAYOUT_VERSION"
     implementation "com.android.support:recyclerview-v7:$SUPPORT_LIBARARY_VERSION"
     implementation "com.android.support:cardview-v7:$SUPPORT_LIBARARY_VERSION"
@@ -55,8 +57,14 @@ dependencies {
 
     // picasso image loading library
     implementation "com.squareup.picasso:picasso:$PICASSO_VERSION"
+
     // glide image loading library
     implementation "com.github.bumptech.glide:glide:$GLIDE_VERSION"
+
+    // ButterKnife : Field and method binding for Android views
+    compile "com.jakewharton:butterknife:$BUTTER_KNIFE_VERSION"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTER_KNIFE_VERSION"
+
     annotationProcessor "com.github.bumptech.glide:compiler:$GLIDE_VERSION"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

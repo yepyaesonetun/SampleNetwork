@@ -14,6 +14,9 @@ import com.yammobots.samplenetwork.data.vo.CurrencyVO;
 import com.yammobots.samplenetwork.delegates.CountryItemDelegate;
 import com.yammobots.samplenetwork.utils.SvgSoftwareLayerSetter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 
@@ -23,10 +26,14 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 
 public class CountryViewHolder extends BaseViewHolder<CountryVO> {
 
-    private TextView tvCountryName;
-    private TextView tvCapitalCityName;
-    private TextView tvPopulation;
-    private ImageView imgFlag;
+    @BindView(R.id.tv_name)
+    TextView tvCountryName;
+    @BindView(R.id.tv_capital)
+    TextView tvCapitalCityName;
+    @BindView(R.id.tv_population)
+    TextView tvPopulation;
+    @BindView(R.id.img_v_country_flag)
+    ImageView imgFlag;
 
     private RequestBuilder<PictureDrawable> requestBuilder;
     private CountryItemDelegate mDelegate;
@@ -34,10 +41,8 @@ public class CountryViewHolder extends BaseViewHolder<CountryVO> {
     public CountryViewHolder(View itemView, CountryItemDelegate delegate) {
         super(itemView);
         mDelegate = delegate;
-        tvCountryName = itemView.findViewById(R.id.tv_name);
-        tvCapitalCityName = itemView.findViewById(R.id.tv_capital);
-        tvPopulation = itemView.findViewById(R.id.tv_population);
-        imgFlag = itemView.findViewById(R.id.img_v_country_flag);
+
+        ButterKnife.bind(this, itemView);
 
         requestBuilder = Glide.with(itemView.getContext())
                 .as(PictureDrawable.class)
