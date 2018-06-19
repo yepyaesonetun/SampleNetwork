@@ -60,12 +60,18 @@ dependencies {
 
     // glide image loading library
     implementation "com.github.bumptech.glide:glide:$GLIDE_VERSION"
+    annotationProcessor "com.github.bumptech.glide:compiler:$GLIDE_VERSION"
 
     // ButterKnife : Field and method binding for Android views
     compile "com.jakewharton:butterknife:$BUTTER_KNIFE_VERSION"
     annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTER_KNIFE_VERSION"
 
-    annotationProcessor "com.github.bumptech.glide:compiler:$GLIDE_VERSION"
+    // reactive_x : a library for composing asynchronous and event-based programs by using observable sequences.
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.0'
+    implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+    implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.1'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

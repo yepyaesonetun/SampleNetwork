@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import com.yammobots.samplenetwork.R;
@@ -19,8 +20,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
 
 public class MainActivity extends AppCompatActivity implements CountryItemDelegate {
 
@@ -29,7 +35,9 @@ public class MainActivity extends AppCompatActivity implements CountryItemDelega
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
     private CountryRVAdapter adapter;
+    private PublishSubject<List<CountryVO>> mCountrySubject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,32 +54,32 @@ public class MainActivity extends AppCompatActivity implements CountryItemDelega
         adapter = new CountryRVAdapter(this, this);
         mRecyclerView.setAdapter(adapter);
 
-        CountryModel.getInstance().startloadingCountryData();
+        mCountrySubject = PublishSubject.create();
+        mCountrySubject.subscribe(new Observer<List<CountryVO>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(List<CountryVO> countryVOS) {
+                adapter.appendNewData(countryVOS);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+        CountryModel.getInstance().startLoadingCountryData(mCountrySubject);
+
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNewsDataLoaded(RestApiEvent.CounrtyDataLoadedEvent event) {
-        adapter.appendNewData(event.getCountryVOList());
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onErrorInvokingAPI(RestApiEvent.ErrorInvokingAPIEvent event) {
-        Toast.makeText(this, event.getErrorMessage(), Toast.LENGTH_LONG).show();
-    }
-
 
     @Override
     public void onTapCountry(CountryVO countryVO) {
