@@ -1,34 +1,25 @@
 package com.yammobots.samplenetwork.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import com.yammobots.samplenetwork.R;
 import com.yammobots.samplenetwork.adapters.CountryRVAdapter;
-import com.yammobots.samplenetwork.data.models.CountryModel;
 import com.yammobots.samplenetwork.data.vo.CountryVO;
-import com.yammobots.samplenetwork.delegates.CountryItemDelegate;
-import com.yammobots.samplenetwork.events.RestApiEvent;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import com.yammobots.samplenetwork.mvp.presenters.CountryListPresenter;
+import com.yammobots.samplenetwork.mvp.views.CountryListView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.PublishSubject;
 
-public class MainActivity extends AppCompatActivity implements CountryItemDelegate {
+public class MainActivity extends AppCompatActivity implements CountryListView {
 
     @BindView(R.id.rv_main)
     RecyclerView mRecyclerView;
@@ -37,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements CountryItemDelega
     Toolbar toolbar;
 
     private CountryRVAdapter adapter;
-    private PublishSubject<List<CountryVO>> mCountrySubject;
+    private CountryListPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,44 +37,63 @@ public class MainActivity extends AppCompatActivity implements CountryItemDelega
 
         ButterKnife.bind(this);
 
+        mPresenter = new CountryListPresenter(this);
+        mPresenter.onCreate();
+
         toolbar.setTitle(R.string.app_name);
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        adapter = new CountryRVAdapter(this, this);
+        adapter = new CountryRVAdapter(this, mPresenter);
         mRecyclerView.setAdapter(adapter);
-
-        mCountrySubject = PublishSubject.create();
-        mCountrySubject.subscribe(new Observer<List<CountryVO>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(List<CountryVO> countryVOS) {
-                adapter.appendNewData(countryVOS);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-
-        CountryModel.getInstance().startLoadingCountryData(mCountrySubject);
 
     }
 
     @Override
-    public void onTapCountry(CountryVO countryVO) {
-        Intent intent = CountryDetailActivity.getNewIntent(this, countryVO.getName());
+    protected void onStart() {
+        super.onStart();
+        mPresenter.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mPresenter.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mPresenter.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestory();
+    }
+
+   @Override
+    public void displayErrorMsg(String errorMsg) {
+        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void displayCountryListData(List<CountryVO> countryVOList) {
+        adapter.appendNewData(countryVOList);
+    }
+
+    @Override
+    public void launchDetailScreen(String name) {
+        Intent intent = CountryDetailActivity.getNewIntent(this, name);
         startActivity(intent);
     }
+
 }
