@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.yammobots.samplenetwork.R;
 import com.yammobots.samplenetwork.data.vo.CountryVO;
+import com.yammobots.samplenetwork.data.vo.CurrencyVO;
 import com.yammobots.samplenetwork.delegates.CountryItemDelegate;
 import com.yammobots.samplenetwork.utils.SvgSoftwareLayerSetter;
 

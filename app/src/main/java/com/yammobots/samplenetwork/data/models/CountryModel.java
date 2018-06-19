@@ -35,6 +35,10 @@ public class CountryModel {
         return sObjInstance;
     }
 
+    public CountryVO getCountryByName(String name){
+        return mCountryMap.get(name);
+    }
+
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onCountriesDataLoaded(RestApiEvent.CounrtyDataLoadedEvent event){
         for (CountryVO countryVO: event.getCountryVOList()){

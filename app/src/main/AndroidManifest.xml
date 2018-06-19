@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.CountryDetailActivity"
-            android:label="CountryDetailActivity"></activity>
+            android:label="Details"/>
     </application>
 
 </manifest>

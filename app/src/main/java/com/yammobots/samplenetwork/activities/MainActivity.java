@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements CountryItemDelega
 
     @Override
     public void onTapCountry(CountryVO countryVO) {
-        Intent intent = new Intent(this, CountryDetailActivity.class);
+        Intent intent = CountryDetailActivity.getNewIntent(this, countryVO.getName());
         startActivity(intent);
     }
 }
