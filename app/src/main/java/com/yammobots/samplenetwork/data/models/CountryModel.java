@@ -30,11 +30,11 @@ public class CountryModel {
     private CountryAPI theAPI;
 
     private CountryModel() {
-        initMMNewsAPI();
+        initCountryAPI();
         mCountryMap = new HashMap<>();
     }
 
-    private void initMMNewsAPI() {
+    private void initCountryAPI() {
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(15, TimeUnit.SECONDS)

@@ -5,7 +5,6 @@ import com.yammobots.samplenetwork.data.vo.CountryVO;
 import java.util.ArrayList;
 
 import io.reactivex.Observable;
-import retrofit2.Call;
 import retrofit2.http.GET;
 
 /**
